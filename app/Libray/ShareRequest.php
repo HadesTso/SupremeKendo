@@ -2,9 +2,9 @@
 
 namespace App\Libray;
 
-class RequestTool
+class ShareRequest
 {
-    static public function send_post($url, $params) {
+    static public function http_post($url, $params) {
 
         $post_data = http_build_query($params);
         $options = array(
@@ -21,37 +21,37 @@ class RequestTool
         return $result;
     }
 
-    static public function ChineseConversion($chinese)
+    static public function codeTransform($code)
     {
-        $str = strlen($chinese);
-        $strConversion = '';
+        $str = strlen($code);
+        $strCode = '';
         for ($i=0; $i < $str ; $i++) {
-            if(preg_match('/^[\x7f-\xff]+$/', $chinese[$i])){
-                $strConversion .= urlencode($chinese[$i]);
+            if(preg_match('/^[\x7f-\xff]+$/', $code[$i])){
+                $strCode .= urlencode($code[$i]);
             }else{
-                $strConversion .= $chinese[$i];
+                $strCode .= $code[$i];
             }
         }
 
         return $strConversion;
     }
 
-    static public function conversion($chinese)
+    static public function Transform($code)
     {
-        $str = strlen($chinese);
-        $strConversion = '';
+        $str = strlen($code);
+        $strCode = '';
         for ($i=0; $i < $str ; $i++) {
-            if(preg_match('/^[\x7f-\xff]+$/', $chinese[$i])){
-                $strConversion .= urlencode($chinese[$i]);
+            if(preg_match('/^[\x7f-\xff]+$/', $code[$i])){
+                $strCode .= urlencode($code[$i]);
             }else{
-                if ($chinese[$i] == '='){
-                    $strConversion .= urlencode($chinese[$i]);
+                if ($code[$i] == '='){
+                    $strCode .= urlencode($code[$i]);
                 }else{
-                    $strConversion .= $chinese[$i];
+                    $strCode .= $code[$i];
                 }
             }
         }
 
-        return $strConversion;
+        return $strCode;
     }
 }

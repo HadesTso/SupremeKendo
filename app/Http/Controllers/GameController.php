@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libray\ShareRequest;
 use App\Models\Announcement;
 use App\Models\Ban;
 use App\Models\Broadcast;
@@ -10,17 +11,18 @@ use App\Models\Item;
 use App\Models\NewRole;
 use App\Models\Server;
 use Illuminate\Http\Request;
-use App\Libray\RequestTool;
 use App\Libray\Response;
 
 class GameController extends Controller
 {
-    private $key = 'rJYgMdja4KXMqwFbAibOM7jhls';
+    private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
     private $ajax_key = '51Game@123.com&%#';
+    private $requestAddress = 'http://134.175.145.254:8072/web_op';
 
     /**
      * 禁言解禁
      * @param Request $request
+     * @param Ban $ban
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function banChat(Request $request, Ban $ban)
@@ -38,7 +40,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_ban';
         $mod       = 'chat_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $server_id, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $server_id, $this->key);
 
         if ($oper == 1) {
             $ban->role_id  = $uid;
@@ -64,6 +66,9 @@ class GameController extends Controller
 
     /**
      * 封停ip
+     * @param Request $request
+     * @param IpOperation $ip_operation
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function closureIp(Request $request, IpOperation $ip_operation)
     {
@@ -81,7 +86,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_ip_suspend';
         $mod       = 'login_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $ip_operation->ip         = $ip;
@@ -99,10 +104,13 @@ class GameController extends Controller
 
     /**
      * 解封ip
+     * @param Request $request
+     * @param IpOperation $ip_operation
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function unlockIp(Request $request, IpOperation $ip_operation)
     {
-        $id       = $request->input('id');
+        $id  = $request->input('id');
 
         $res = $ip_operation->where(['id' => $id])->first();
 
@@ -119,7 +127,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_ip_suspend';
         $mod       = 'login_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, intval($res->server_id), $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, intval($res->server_id), $this->key);
 
         if ($result['res'] == "1") {
             $ip_operation->where(['id' => $id])->update(['status' => 0]);
@@ -131,6 +139,8 @@ class GameController extends Controller
 
     /**
      * 充值
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function recharge(Request $request)
     {
@@ -147,7 +157,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_pay_rmb';
         $mod       = 'pay_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             return response(Response::Success());
@@ -158,6 +168,9 @@ class GameController extends Controller
 
     /**
      * 开服
+     * @param Request $request
+     * @param Server $server
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function openSuit(Request $request, Server $server)
     {
@@ -171,7 +184,7 @@ class GameController extends Controller
         $fun       = 'web_op_node';
         $mod       = 'global';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['server_status' => 1, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -183,6 +196,9 @@ class GameController extends Controller
 
     /**
      * 关服
+     * @param Request $request
+     * @param Server $server
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function closeSuit(Request $request, Server $server)
     {
@@ -196,7 +212,7 @@ class GameController extends Controller
         $fun       = 'web_op_node';
         $mod       = 'global';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['server_status' => 0, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -208,6 +224,9 @@ class GameController extends Controller
 
     /**
      * 发送道具
+     * @param Request $request
+     * @param Item $item
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function sendProp(Request $request, Item $item)
     {
@@ -226,7 +245,7 @@ class GameController extends Controller
         $fun  = 'web_op_sys_send_item';
         $mod  = 'pay_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $item->uid       = $uid;
@@ -245,6 +264,9 @@ class GameController extends Controller
 
     /**
      * 聊天公告
+     * @param Request $request
+     * @param Announcement $announcement
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function chatAnnouncement(Request $request, Announcement $announcement)
     {
@@ -257,18 +279,18 @@ class GameController extends Controller
         }
 
         $url_args = array(
-            "comment"      => strtolower(RequestTool::ChineseConversion($res->comment)),
+            "comment"  => strtolower(ShareRequest::codeTransform($res->comment)),
         );
 
         $url = array(
-            "comment"      => strtolower(RequestTool::conversion($res->comment)),
+            "comment" => strtolower(ShareRequest::Transform($res->comment)),
         );
 
-        $time      = time();
-        $fun       = 'web_op_sys_chat';
-        $mod       = 'chat_api';
+        $time  = time();
+        $fun   = 'web_op_sys_chat';
+        $mod   = 'chat_api';
 
-        $result = $this->requestWXs($url_args, $url, $fun, $mod, $time, intval($res->server_id), $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, intval($res->server_id), $this->key, $url);
 
         if ($result['res'] == "1") {
             $announcement->where(['id' => $id])->update(['status' => 0]);
@@ -280,10 +302,13 @@ class GameController extends Controller
 
     /**
      * 发送跑马灯
+     * @param Request $request
+     * @param Broadcast $broadcast
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function sendMarquee(Request $request, Broadcast $broadcast)
     {
-        $id = $request->input('id');
+        $id  = $request->input('id');
 
         $res = $broadcast->where(['id' => $id])->first();
 
@@ -314,7 +339,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_broadcast';
         $mod       = 'chat_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $broadcast->where(['id' => $id])->update(['status' => 0, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -326,6 +351,9 @@ class GameController extends Controller
 
     /**
      * 取消跑马灯
+     * @param Request $request
+     * @param Broadcast $broadcast
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function cancelMarquee(Request $request, Broadcast $broadcast)
     {
@@ -343,7 +371,7 @@ class GameController extends Controller
         $fun       = 'web_op_sys_broadcast_undo';
         $mod       = 'chat_api';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $broadcast->where(['id' => $id])->update(['status' => 1, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -355,6 +383,9 @@ class GameController extends Controller
 
     /**
      * 定时开服
+     * @param Request $request
+     * @param Server $server
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function timeTack(Request $request, Server $server)
     {
@@ -372,7 +403,7 @@ class GameController extends Controller
         $fun       = 'web_op_work_day';
         $mod       = 'global';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['activity_at' => $activity_at, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -384,6 +415,8 @@ class GameController extends Controller
 
     /**
      * 服务器实时数据
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function ServerData(Request $request)
     {
@@ -399,7 +432,7 @@ class GameController extends Controller
         $fun       = 'web_op_sync_data';
         $mod       = 'global';
 
-        $result = $this->requestWX($url_args, $fun, $mod, $time, $sid_list, $this->key);
+        $result = $this->requestModule($url_args, $fun, $mod, $time, $sid_list, $this->key);
 
         return response(Response::Success($result));
 
@@ -445,25 +478,8 @@ class GameController extends Controller
         $fun       = 'web_op_sys_mail';
         $mod       = 'mail_api';
 
-        $this->requestWX($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
-    }
-
-    protected function send_post($url, $params) {
-
-        $post_data = http_build_query($params);
-        $options = array(
-            'http' => array(
-                'method' => 'POST',
-                'header' => 'Content-type:application/x-www-form-urlencoded',
-                'content' => $post_data,
-                'timeout' => 15 * 60 // 超时时间（单位:s）
-            )
-        );
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-
-        return $result;
     }
 
     /**
@@ -477,11 +493,15 @@ class GameController extends Controller
      * @param $key
      * @return mixed
      */
-    protected function requestWX($url_args, $fun, $mod, $time, $serverId, $key)
+    protected function requestModule($url_args, $fun, $mod, $time, $serverId, $key, $url)
     {
         $sign_args = json_encode($url_args);
 
         $sign = md5("args={$sign_args}&fun={$fun}&mod={$mod}&sid={$serverId}&time={$time}&key={$key}");
+
+        if ($url) {
+            $sign_args = json_encode($url);
+        }
 
         //组装内容
         $info = array(
@@ -493,32 +513,7 @@ class GameController extends Controller
             'sign'      => $sign,
         );
 
-        $res = RequestTool::send_post(env('WXURL'), $info);
-
-        $result = json_decode($res, true);
-
-        return $result;
-    }
-
-    protected function requestWXs($url_args, $url, $fun, $mod, $time, $serverId, $key)
-    {
-        $sign_args = json_encode($url_args);
-
-        $sign = md5("args={$sign_args}&fun={$fun}&mod={$mod}&sid={$serverId}&time={$time}&key={$key}");
-
-        $sign_url = json_encode($url);
-
-        //组装内容
-        $info = array(
-            'args'      => $sign_url,
-            'fun'       => $fun,
-            'mod'       => $mod,
-            'sid'       => $serverId,
-            'time'      => $time,
-            'sign'      => $sign,
-        );
-
-        $res = RequestTool::send_post(env('WXURL'), $info);
+        $res = ShareRequest::http_post($this->requestAddress, $info);
 
         $result = json_decode($res, true);
 
