@@ -19,7 +19,7 @@ class ManagerController extends Controller
             $orm->where(['manager_name' => $manager_name]);
         }
 
-        $list = $orm->paginate(5);
+        $list = $orm->paginate(10);
         foreach ($list as $key=>$val) {
             $menu = json_decode($val['menu'], true);
             if ($menu){

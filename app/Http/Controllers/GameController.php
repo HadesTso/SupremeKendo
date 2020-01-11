@@ -449,7 +449,7 @@ class GameController extends Controller
      * @param NewRole $newRoleModel
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function giftRoleGift(Request $request, NewRole $newRoleModel)
+    public function createRoleGift(Request $request, NewRole $newRoleModel)
     {
         $rid  = $request->input('rid');
         $sid  = $request->input('sid');
@@ -469,8 +469,8 @@ class GameController extends Controller
 
         $url_args = array(
             "objects"     => array(intval($rid)),
-            "title"       => strtolower(RequestTool::ChineseConversion($newRole->title)),
-            "content"     => strtolower(RequestTool::ChineseConversion($newRole->content)),
+            "title"       => strtolower(ShareRequest::codeTransform($newRole->title)),
+            "content"     => strtolower(ShareRequest::codeTransform($newRole->content)),
             "items"       => $newRole->attach_s,
         );
 
