@@ -26,7 +26,16 @@ Route::any('role/data', 'DataController@roleData');
 
 Route::post('time/tack1', 'GameController@timeTack');
 
+
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
+
+    Route::post('account', 'AccountController@store');
+    Route::any('account/list', 'AccountController@account');
+    Route::patch('account/{id}', 'AccountController@update');
+    Route::post('account/{id}', 'AccountController@modification');
+    Route::get('info', 'AccountController@accountInfo');
+
+    Route::post('game', 'PlayController@store');
 
     Route::post('manager/add', 'ManagerController@store');
     Route::patch('manager/{id}', 'ManagerController@update');
@@ -44,12 +53,6 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
 
     Route::any('carte/list', 'CarteController@carteList');
     Route::post('carte/add', 'CarteController@store');
-
-    Route::post('account/add', 'AccountController@store');
-    Route::any('account/list', 'AccountController@accountList');
-    Route::patch('account/{id}', 'AccountController@update');
-    Route::post('account/{id}', 'AccountController@save');
-    Route::get('info', 'AccountController@accountInfo');
 
     Route::post('send/mail', 'GMController@sendMail');
     Route::post('send/solo/mail', 'GMController@sendSoloMail');
@@ -122,5 +125,8 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
     Route::any('channel/list', 'ChannelController@index');
     Route::post('channel', 'ChannelController@store');
     Route::post('channel/{id}', 'ChannelController@update');
+
+
+    Route::get('get/games', 'GeneralController@getGame');
 
 });

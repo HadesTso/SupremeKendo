@@ -7,6 +7,7 @@ use App\Libray\Response;
 use App\Models\Account;
 use App\Models\Admin;
 use App\Models\ManagerCarte;
+use App\Service\MenuService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
@@ -19,7 +20,7 @@ class LoginController extends Controller
         $username = $request->input('username', null);
         $password = $request->input('password', null);
 
-        $user = $account->with(['manager'])->where(['account_name' => $username])->first();
+        $user = $account->where(['account_name' => $username])->first();
 
         if (!$user){
             return response(Response::Error(trans('ResponseMsg.USER_NOT_EXIST'), 20004));
@@ -33,14 +34,8 @@ class LoginController extends Controller
             return response(Response::Error(trans('ResponseMsg.USER_LOGIN_ERROR'), 20002));
         }
 
-        $menu = json_decode($user['manager']['menu'], true);
-
-        foreach ($menu as $key=>$val) {
-            $menu[$key] = json_decode($val, true);
-        }
-
         $Token = $this->setLoginToken($user);
-        $Token['menu'] = $menu;
+        //$Token['game'] = json_decode(json_decode($user->game), true);
 
         return response(Response::Success($Token));
     }
@@ -48,6 +43,22 @@ class LoginController extends Controller
     public function logout()
     {
 
+    }
+
+    public function accessMenu(Request $request, MenuService $menuService)
+    {
+        $game_id    = $request->input('game_id');
+        $manager_id = $request->input('manager_id');
+
+        $menu = $menuService->getAdministratorMenu($manager_id, $game_id);
+
+        $data = [
+            'menu' => $menu
+        ];
+
+        define('GID', $game_id);
+
+        return response(Response::Success($data));
     }
 
     protected function setLoginToken($user)
