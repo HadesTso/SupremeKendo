@@ -6,7 +6,7 @@ use App\Models\Account;
 use App\Models\Games;
 use Illuminate\Http\Request;
 
-class AccountController extends Controller
+class WebmasterController extends Controller
 {
 
     public function store(Request $request, Account $account)
@@ -80,14 +80,7 @@ class AccountController extends Controller
         return response(Response::Success());
     }
 
-    public function accountInfo(Account $account)
-    {
-        $info = $account->where(['id' => UID])->first();
-
-        return response(Response::Success($info));
-    }
-
-    public function account(Request $request, Account $account)
+    public function list(Request $request, Account $account)
     {
         $account_name = $request->input('name');
         $manager_id   = $request->input('manager_id');
@@ -103,23 +96,30 @@ class AccountController extends Controller
         if ($manager_id){
             $orm->where(['manager_id' => $manager_id]);
         }
-        $list = $orm->paginate(5);
+        $list = $orm->paginate(10);
 
         $games = Games::all()->keyBy('id')->toArray();
 
-        foreach ($list as &$value){
+        foreach ($list as $key=>$value){
             $gameVer = json_decode($value['game'], true);
 
             if ($gameVer){
                 $gameArray = array();
-                foreach ($gameVer as $key=>$val){
-                    $gameArray[$key]['id'] = $val;
-                    $gameArray[$key]['game_name'] = $games[$val]['game_name'];
+                foreach ($gameVer as $k=>$val){
+                    $gameArray[$k]['id'] = $val;
+                    $gameArray[$k]['game_name'] = $games[$val]['game_name'];
                 }
-                $value['game'] = $gameArray;
+                $list[$key]['games'] = $gameArray;
             }
         }
 
         return response(Response::Success($list));
+    }
+
+    public function information(Account $account)
+    {
+        $info = $account->where(['id' => UID])->first();
+
+        return response(Response::Success($info));
     }
 }
