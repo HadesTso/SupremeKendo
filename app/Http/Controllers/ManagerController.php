@@ -3,93 +3,141 @@
 namespace App\Http\Controllers;
 
 use App\Libray\Response;
-use App\Models\Account;
 use App\Models\Manager;
+use App\Service\MenuService;
 use Illuminate\Http\Request;
+use DB;
 
 class ManagerController extends Controller
 {
-    public function managerList(Request $request, Manager $manager)
+    public function store(Request $request)
     {
-        $manager_name = $request->input('name');
+        $name    = $request->input('name');
+        $remark  = $request->input('remark');
+        $game_id = $request->input('game_id');
+        $menu    = $request->input('menuList', null);
 
-        $orm = $manager->select('id', 'manager_name', 'remark', 'status', 'menu');
+        DB::beginTransaction();
+        try{
+            $managerArr = array(
+                'name'       => $name,
+                'remark'     => $remark,
+                'status'     => 0,
+                'createTime' => time(),
+                'updateTime' => time(),
+            );
+            $id = Manager::insertGetId($managerArr);
 
-        if ($manager_name){
-            $orm->where(['manager_name' => $manager_name]);
+            if ($menu) {
+                $menuArray = array();
+
+                foreach ($menu as $value) {
+                    $valueBase = json_decode($value, true);
+                    $menuArray[] = $valueBase['id'];
+                    if (isset($valueBase['children'])) {
+                        foreach ($valueBase['children'] as $val) {
+                            $menuArray[] = $val['id'];
+                            if (isset($val['children'])) {
+                                foreach ($val['children'] as $v) {
+                                    $menuArray[] = $v['id'];
+                                }
+                            }
+                        }
+                    }
+                }
+                foreach ($menuArray as $value) {
+                    ManagerMenu::create(['manager_id' => $id, 'menu_id' => $value]);
+                }
+            }
+            DB::commit();
+            return response(Response::Success('新增成功'));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response(Response::Error(trans("新增失败")));
         }
 
-        $list = $orm->paginate(10);
-        foreach ($list as $key=>$val) {
-            $menu = json_decode($val['menu'], true);
-            if ($menu){
-                foreach ($menu as $k=>$val) {
-                    $menu[$k] = json_decode($val, true);
+    }
+
+    public function update(Request $request, Manager $managerModel)
+    {
+        $data = $request->all();
+
+        if (!$managerModel->where(['id' => $data['id']])->update(['status' => $data['status']])){
+            return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
+        }
+
+        return response(Response::Success());
+    }
+
+    public function modification(Request $request)
+    {
+        $id      = $request->input('id');
+        $name    = $request->input('name');
+        $remark  = $request->input('remark');
+        $status  = $request->input('status');
+        $game_id = $request->input('game_id');
+        $menu    = $request->input('menuList', null);
+
+        DB::beginTransaction();
+        try{
+            $managerModel->where(['id' => $id])
+                ->update([
+                    'name'       => $name,
+                    'remark'     => $remark,
+                    'status'     => $status,
+                    'updateTime' => time(),
+                ]);
+            ManagerMenu::where(['manager_id' => $id, 'game_id' => $game_id])->delete();
+
+            if ($menu) {
+                $menuArray = array();
+                foreach ($menu as $value) {
+                    $valueBase = json_decode($value, true);
+                    $menuArray[] = $valueBase['id'];
+                    if (isset($valueBase['children'])) {
+                        foreach ($valueBase['children'] as $val) {
+                            $menuArray[] = $val['id'];
+                            if (isset($val['children'])) {
+                                foreach ($val['children'] as $v) {
+                                    $menuArray[] = $v['id'];
+                                }
+                            }
+                        }
+                    }
                 }
-                $list[$key]['menu'] = $menu;
+                foreach ($menuArray as $value) {
+                    ManagerMenu::create(['manager_id' => $id, 'menu_id' => $value, 'game_id' => $game_id]);
+                }
             }
+            DB::commit();
+            return response(Response::Success('修改成功'));
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response(Response::Error(trans("修改失败")));
+        }
+    }
+
+    public function list(Manager $managerModel)
+    {
+        $list = $managerModel->select('id', 'name', 'remark', 'status', 'created_time')->paginate(10);
+
+        foreach ($list as $value) {
+            $value->createTime = date('Y-m-d H:i:s', $value->createTime);
         }
 
         return response(Response::Success($list));
     }
 
-    public function store(Request $request, Manager $manager)
+    public function information(Manager $managerModel, MenuService $menuService)
     {
-        $manager_name = $request->input('name');
-        $status       = $request->input('status');
-        $remark       = $request->input('remark');
-        $menu         = $request->input('menuList');
+        $list = $managerModel->paginate(10);
 
-        if ($manager->where(['manager_name' => $manager_name])->first()){
-            return response(Response::Error(trans('ResponseMsg.ROLE_HAS_EXISTED'), 90001));
+        foreach ($list as $value) {
+            $value->menu = $menuService->getAdministratorMenu($value->id, $this);
+            $value->createTime = date('Y-m-d H:i:s', $value->createTime);
+            $value->updateTime = date('Y-m-d H:i:s', $value->updateTime);
         }
 
-        $manager->manager_name = $manager_name;
-        $manager->status       = $status;
-        $manager->remark       = $remark;
-        $manager->menu         = json_encode($menu);
-
-        $result = $manager->save();
-
-        if ($result){
-            return response(Response::Success());
-        }
-        return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
-
-    }
-
-    public function update(Request $request, Manager $manager)
-    {
-        $data = $request->all();
-
-        if (!$manager->where(['id' => $data['id']])->update(['status' => $data['status']])){
-            return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
-        }
-
-        return response(Response::Success());
-    }
-
-    public function save(Request $request, Manager $manager)
-    {
-        $id           = $request->input('id');
-        $manager_name = $request->input('name');
-        $status       = $request->input('status');
-        $remark       = $request->input('remark');
-        $menu         = $request->input('menuList');
-
-        $orm = $manager->where(['id' => $id])->first();
-
-        $orm->manager_name = $manager_name;
-        $orm->status       = $status;
-        $orm->remark       = $remark;
-        $orm->menu         = json_encode($menu);
-        $orm->updated_at   = date('Y-m-d H:i:s', time());
-        $result = $orm->save();
-
-        if (!$result){
-            return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
-        }
-
-        return response(Response::Success());
+        return response(Response::Success($list));
     }
 }

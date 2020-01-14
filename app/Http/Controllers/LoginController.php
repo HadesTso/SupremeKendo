@@ -35,17 +35,12 @@ class LoginController extends Controller
         }
 
         $Token = $this->setLoginToken($user);
-        //$Token['game'] = json_decode(json_decode($user->game), true);
+        $Token['game'] = json_decode($user->game, true);
 
         return response(Response::Success($Token));
     }
 
-    public function logout()
-    {
-
-    }
-
-    public function accessMenu(Request $request, MenuService $menuService)
+    public function getMenus(Request $request, MenuService $menuService)
     {
         $game_id    = $request->input('game_id');
         $manager_id = $request->input('manager_id');

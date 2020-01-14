@@ -11,6 +11,7 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// 账号登录接口
 Route::any('login', 'LoginController@index');
 
 Route::any('get/cast', 'AjaxController@getCast');
@@ -29,18 +30,32 @@ Route::post('time/tack1', 'GameController@timeTack');
 
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
 
-    Route::post('account', 'AccountController@store');
-    Route::any('account/list', 'AccountController@account');
-    Route::patch('account/{id}', 'AccountController@update');
-    Route::post('account/{id}', 'AccountController@modification');
-    Route::get('info', 'AccountController@accountInfo');
+    // 新增管理员接口
+    Route::post('account', 'WebmasterController@store');
+    // 更新管理员状态接口
+    Route::patch('account/{id}', 'WebmasterController@update');
+    // 更新管理员信息接口
+    Route::post('account/{id}', 'WebmasterController@modification');
+    // 管理员列表接口
+    Route::any('account/list', 'WebmasterController@list');
+    // 管理员信息接口
+    Route::get('account/info', 'WebmasterController@information');
+
+    // 登录获取游戏菜单接口
+    Route::post('login/menus', 'LoginController@getMenus');
 
     Route::post('game', 'PlayController@store');
 
-    Route::post('manager/add', 'ManagerController@store');
+    // 新增角色接口
+    Route::post('manager', 'ManagerController@store');
+    // 更新角色状态接口
     Route::patch('manager/{id}', 'ManagerController@update');
-    Route::any('manager/list', 'ManagerController@managerList');
-    Route::post('manager/{id}', 'ManagerController@save');
+    // 更新角色信息接口
+    Route::post('manager/{id}', 'ManagerController@modification');
+    // 角色列表接口
+    Route::any('manager/list', 'ManagerController@list');
+    // 角色信息接口
+    Route::post('manager/info', 'ManagerController@information');
 
     Route::get('manager/getList', 'DedicineController@getManagerList');
     Route::get('channel/getList', 'DedicineController@getChannelList');
