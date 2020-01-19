@@ -17,14 +17,10 @@ use Excel;
 class DataController extends Controller
 {
     protected $database = array(
-        '20003' => array('user' => 'jyzj', 'chat' => 'jyzj_chat'),
-        '20004' => array('user' => 'bmsg', 'chat' => 'bmsg_chat'),
-        '20005' => array('user' => 'bhgr', 'chat' => 'bhgr_chat'),
-        '20006' => array('user' => 'twzx', 'chat' => 'twzx_chat'),
+        '2001' => array('user' => 'wsjd_s2001', 'chat' => 'wsjd_l2001'),
     );
 
-
-    public function roleData(Request $request, Ban $ban)
+    /*public function roleData(Request $request, Ban $ban)
 	{
 	    $server_id  = 20003;
 
@@ -155,8 +151,7 @@ class DataController extends Controller
         })->export('xls');
 
         //return response(Response::Success($list));
-	}
-
+	}*/
 
     /**
      * 角色列表
@@ -203,44 +198,15 @@ class DataController extends Controller
         $list = $orm->paginate(20);
 
         $server  = Server::all()->keyBy('id')->toArray();
-	    $channel = Channel::all()->keyBy('id')->toArray();
-
-	    $username = DB::connection('account')
-            ->table('account')
-            ->select('account', 'uuid')
-            ->get()->toArray();
-
-        $userCount = array_column($username, null, 'uuid');
+	    //$channel = Channel::all()->keyBy('id')->toArray();
 
 	    foreach ($list as $key=>$value) {
-	        $json = json_decode($value->data_json, true);
 
-	        if (isset($json['temp_data'])) {
-	            $value->chivalrousMan = $json['temp_data'][0];
-	            $value->wulinSecret   = $json['temp_data'][1];
-	            $value->magicWeapon   = $json['temp_data'][2];
-	            $value->dynamic       = $json['temp_data'][3];
-	            $value->sweeping      = $json['temp_data'][4];
-	            $value->grandMaster   = $json['temp_data'][5];
-	            $value->wulinSupreme  = $json['temp_data'][6];
-            }else {
-	            $value->chivalrousMan = 0;
-	            $value->wulinSecret   = 0;
-	            $value->magicWeapon   = 0;
-	            $value->dynamic       = 0;
-	            $value->sweeping      = 0;
-	            $value->grandMaster   = 0;
-	            $value->wulinSupreme  = 0;
-            }
-	        unset($value->data_json);
-
-            $value->cid = $channel[$value->cid]['channel_name'];
+            //$value->cid = $channel[$value->cid]['channel_name'];
             $value->server_name = $server[$value->sid]['server_name'];
             $value->login_time = date('Y-m-d H:i:s', $value->login_time);
             $value->reg_time   = date('Y-m-d H:i:s', $value->reg_time);
             $value->last_time  = date('Y-m-d H:i:s', $value->last_time);
-
-            $value->username = substr($userCount[$value->uuid]->account, 21);
 
             $status = $ban->where(['role_id' => $value->uid, 'serverId' => $value->sid, 'status' => 1])->select('type')->get();
             $value->status = '';

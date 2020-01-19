@@ -491,9 +491,10 @@ class GameController extends Controller
      * @param $time
      * @param $serverId
      * @param $key
+     * @param string $url
      * @return mixed
      */
-    protected function requestModule($url_args, $fun, $mod, $time, $serverId, $key, $url)
+    protected function requestModule($url_args, $fun, $mod, $time, $serverId, $key, $url = '')
     {
         $sign_args = json_encode($url_args);
 

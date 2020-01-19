@@ -6,6 +6,7 @@ use App\Libray\Encryption;
 use App\Libray\Response;
 use App\Models\Account;
 use App\Models\Admin;
+use App\Models\Good;
 use App\Models\ManagerCarte;
 use App\Service\MenuService;
 use Illuminate\Http\Request;
@@ -35,7 +36,8 @@ class LoginController extends Controller
         }
 
         $Token = $this->setLoginToken($user);
-        $Token['game'] = json_decode($user->game, true);
+        $Token['game'] = $user->game;
+        $Token['manager_id'] = $user->manager_id;
 
         return response(Response::Success($Token));
     }

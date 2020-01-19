@@ -20,9 +20,8 @@ class WebmasterController extends Controller
         $account->account_name = $data['account_name'];
         $account->real_name    = $data['real_name'];
         $account->password     = password_hash($data['password'], PASSWORD_DEFAULT);
-        $account->manager_id   = empty($data['manager_id']) ? NULL : json_encode($data['manager_id']);
-        $account->channel      = empty($data['channel']) ? NULL : json_encode($data['channel']);
-        $account->game         = empty($data['game']) ? NULL : json_encode($data['game']);
+        $account->manager_id   = empty($data['manager_id']) ? NULL : $data['manager_id'];
+        $account->game         = empty($data['game']) ? json_encode(array()) : json_encode($data['game']);
         $account->status       = 1;
         $account->ip           = $request->getClientIp();
 
@@ -50,12 +49,10 @@ class WebmasterController extends Controller
             $orm->password = password_hash($password, PASSWORD_DEFAULT);
         }
 
-        if ($channel){
-            $orm->channel = json_encode($channel);
-        }
-
-        if ($game){
+        if ($game) {
             $orm->game = json_encode($game);
+        } else {
+            $orm->game = json_encode(array());
         }
 
         $orm->real_name  = $real_name;
@@ -97,21 +94,6 @@ class WebmasterController extends Controller
             $orm->where(['manager_id' => $manager_id]);
         }
         $list = $orm->paginate(10);
-
-        $games = Games::all()->keyBy('id')->toArray();
-
-        foreach ($list as $key=>$value){
-            $gameVer = json_decode($value['game'], true);
-
-            if ($gameVer){
-                $gameArray = array();
-                foreach ($gameVer as $k=>$val){
-                    $gameArray[$k]['id'] = $val;
-                    $gameArray[$k]['game_name'] = $games[$val]['game_name'];
-                }
-                $list[$key]['games'] = $gameArray;
-            }
-        }
 
         return response(Response::Success($list));
     }

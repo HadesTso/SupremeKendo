@@ -14,6 +14,8 @@
 // 账号登录接口
 Route::any('login', 'LoginController@index');
 
+Route::any('addgoods', 'LoginController@addgoods');
+
 Route::any('get/cast', 'AjaxController@getCast');
 Route::any('role/gift', 'AjaxController@giftUseCheck');
 Route::any('new/role', 'GameController@createRoleGift');
@@ -27,6 +29,7 @@ Route::any('role/data', 'DataController@roleData');
 
 Route::post('time/tack1', 'GameController@timeTack');
 
+Route::any('menu', 'MenuController@list');
 
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
 
@@ -47,15 +50,19 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
     Route::post('game', 'PlayController@store');
 
     // 新增角色接口
-    Route::post('manager', 'ManagerController@store');
+    Route::post('manager/store', 'ManagerController@store');
     // 更新角色状态接口
     Route::patch('manager/{id}', 'ManagerController@update');
     // 更新角色信息接口
     Route::post('manager/{id}', 'ManagerController@modification');
     // 角色列表接口
-    Route::any('manager/list', 'ManagerController@list');
+    Route::get('manager/list', 'ManagerController@list');
+
     // 角色信息接口
     Route::post('manager/info', 'ManagerController@information');
+
+    // 角色菜单信息
+    Route::any('menu/manager', 'MenuController@getMenus');
 
     Route::get('manager/getList', 'DedicineController@getManagerList');
     Route::get('channel/getList', 'DedicineController@getChannelList');
