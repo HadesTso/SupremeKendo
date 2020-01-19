@@ -22,7 +22,7 @@ use Monolog\Handler\IFTTTHandler;
 
 class GMController extends Controller
 {
-    private $key = 'rJYgMdja4KXMqwFbAibOM7jhls';
+    private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
 
     public function banLogin(Request $request)
     {
@@ -348,7 +348,7 @@ class GMController extends Controller
                     $role = explode("|", $value['role_list']);
                     $role_name = '';
                     foreach ($role as $k => $v) {
-                        $roleName = DB::connection('wxfyl_s2002')
+                        $roleName = DB::connection('wsjd_s2001')
                             ->table('user')
                             ->where(['uid' => $v])
                             ->select('uid', 'uname')

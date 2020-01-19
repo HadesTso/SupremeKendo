@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class ManagerMenu extends Model
 {
     protected $fillable = [
-        'manager_id', 'menu_id',
+        'manager_id', 'menu_id', 'game_id'
     ];
 }

@@ -33,7 +33,7 @@ class ShareRequest
             }
         }
 
-        return $strConversion;
+        return $strCode;
     }
 
     static public function Transform($code)
