@@ -451,7 +451,7 @@ class GameController extends Controller
      */
     public function createRoleGift(Request $request, NewRole $newRoleModel)
     {
-        $rid  = $request->input('rid');
+        $rid  = $request->input('uid');
         $sid  = $request->input('sid');
         $sign = $request->input('sign');
 
