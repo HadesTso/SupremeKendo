@@ -107,7 +107,7 @@ return [
 
         'wsjd_l20001' => [
             'driver' => 'mysql',
-            'host' => '118.89.27.234',
+            'host' => '118.89.42.90',
             'port' => '3306',
             'database' => 'wsjd_l20001',
             'username' => 'root',
