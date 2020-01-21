@@ -18,6 +18,7 @@ class DataController extends Controller
 {
     protected $database = array(
         '2001' => array('user' => 'wsjd_s2001', 'chat' => 'wsjd_l2001'),
+        '20001' => array('user' => 'wsjd_s20001', 'chat' => 'wsjd_l20001'),
     );
 
     /*public function roleData(Request $request, Ban $ban)
