@@ -93,9 +93,9 @@ return [
 
         'wsjd_s20001' => [
             'driver' => 'mysql',
-            'host' => '169.45.199.230',
+            'host' => '134.175.89.20',
             'port' => '3306',
-            'database' => 'wsjd_s20001',
+            'database' => 'wsjd_s10001',
             'username' => 'root',
             'password' => 'angel198297',
             'charset' => 'utf8mb4',
