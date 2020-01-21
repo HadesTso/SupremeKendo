@@ -91,6 +91,34 @@ return [
             'engine' => null,
         ],
 
+        'wsjd_s20001' => [
+            'driver' => 'mysql',
+            'host' => '169.45.199.230',
+            'port' => '3306',
+            'database' => 'wsjd_s20001',
+            'username' => 'root',
+            'password' => 'angel198297',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'wsjd_l20001' => [
+            'driver' => 'mysql',
+            'host' => '118.89.27.234',
+            'port' => '3306',
+            'database' => 'wsjd_l20001',
+            'username' => 'root',
+            'password' => 'angel198297',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
