@@ -95,7 +95,7 @@ return [
             'driver' => 'mysql',
             'host' => '134.175.89.20',
             'port' => '3306',
-            'database' => 'wsjd_s12001',
+            'database' => 'wsjd_s20001',
             'username' => 'root',
             'password' => 'angel198297',
             'charset' => 'utf8mb4',
