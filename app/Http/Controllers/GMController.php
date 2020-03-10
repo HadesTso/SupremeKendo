@@ -290,7 +290,9 @@ class GMController extends Controller
 
         $res = json_decode($res, true);
 
-        dump($res);
+        //dump($res);
+
+        return response(Response::Success($res));
 
         if ($res['res'] == "1") {
             if ($result){
