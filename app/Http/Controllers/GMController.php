@@ -277,7 +277,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('WSJDURL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
@@ -291,7 +291,6 @@ class GMController extends Controller
         $res = json_decode($res, true);
 
         return response(Response::Success($res));
-
 
         if ($res['res'] == "1") {
             if ($result){
