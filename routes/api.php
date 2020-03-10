@@ -47,7 +47,7 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
     // 登录获取游戏菜单接口
     Route::post('login/menus', 'LoginController@getMenus');
 
-    Route::post('game', 'PlayController@store');
+    Route::get('game', 'PlayController@store');
 
     // 新增角色接口
     Route::post('manager/store', 'ManagerController@store');
