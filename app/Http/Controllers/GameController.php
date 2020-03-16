@@ -186,8 +186,6 @@ class GameController extends Controller
 
         $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
 
-        dump($result);
-
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['server_status' => 1, 'updated_at' => date('Y-m-d H:i:s', time())]);
             return response(Response::Success());
@@ -406,6 +404,8 @@ class GameController extends Controller
         $mod       = 'global';
 
         $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+
+        dump($result);
 
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['activity_at' => $activity_at, 'updated_at' => date('Y-m-d H:i:s', time())]);
