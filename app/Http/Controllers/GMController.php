@@ -277,7 +277,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WSJDURL'), $info);
+        $res = $this->send_post(env('WXURL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
