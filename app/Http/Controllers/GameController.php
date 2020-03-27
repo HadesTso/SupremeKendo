@@ -12,12 +12,14 @@ use App\Models\NewRole;
 use App\Models\Server;
 use Illuminate\Http\Request;
 use App\Libray\Response;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Client;
 
 class GameController extends Controller
 {
     private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
     private $ajax_key = '51Game@123.com&%#';
-    private $requestAddress = 'http://134.175.145.254:8072/web_op';
+    private $url = 'http://134.175.145.254:8072/web_op';
 
     /**
      * 禁言解禁
@@ -463,22 +465,24 @@ class GameController extends Controller
             return response(Response::RequestError(137002));
         }
 
-        $newRole = $newRoleModel->where(['status' => 1])->orderBy('id', 'DESC')->first();
+        $newRole = $newRoleModel->where(['status' => 1])->get()->toArray();
 
         $serverId = intval($sid);
 
-        $url_args = array(
-            "objects"     => array(intval($rid)),
-            "title"       => strtolower(ShareRequest::codeTransform($newRole->title)),
-            "content"     => strtolower(ShareRequest::codeTransform($newRole->content)),
-            "items"       => $newRole->attach_s,
-        );
+        foreach ($newRole as $value) {
+            $url_args = array(
+                "objects"     => array(intval($rid)),
+                "title"       => strtolower(ShareRequest::codeTransform($value['title'])),
+                "content"     => strtolower(ShareRequest::codeTransform($value['content'])),
+                "items"       => $value['attach_s'],
+            );
 
-        $time      = time();
-        $fun       = 'web_op_sys_mail';
-        $mod       = 'mail_api';
+            $time      = time();
+            $fun       = 'web_op_sys_mail';
+            $mod       = 'mail_api';
 
-        $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+            $res = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+        }
 
     }
 
@@ -514,7 +518,7 @@ class GameController extends Controller
             'sign'      => $sign,
         );
 
-        $res = ShareRequest::http_post($this->requestAddress, $info);
+        $res = ShareRequest::http_post($this->url, $info);
 
         $result = json_decode($res, true);
 
