@@ -497,23 +497,6 @@ class GameController extends Controller
 
     }
 
-    public function kickingOff(Request $request)
-    {
-        $serverId  = $request->input('serverId');
-
-        $url_args = array(
-            "uid_list" => array(),
-        );
-
-        $time      = time();
-        $fun       = 'web_op_sys_off_line';
-        $mod       = 'login_api';
-
-        $res = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
-
-        return response(Response::Success($res));
-    }
-
     /**
      * 公共请求方法
      *
