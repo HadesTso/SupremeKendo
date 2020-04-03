@@ -26,8 +26,10 @@ Route::any('device/activation', 'AjaxController@DeviceActivation');
 Route::any('check/activation', 'AjaxController@checkActivation');
 Route::any('callback', 'AjaxController@callback');
 Route::any('role/data', 'DataController@roleData');
+Route::any('kicking/off', 'GameController@kickingOff');
 
 Route::post('time/tack1', 'GameController@timeTack');
+Route::get('updateGoods', 'GMController@updateGoods');
 
 Route::any('menu', 'MenuController@list');
 

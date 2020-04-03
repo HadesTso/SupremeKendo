@@ -14,12 +14,23 @@ use Illuminate\Http\Request;
 use App\Libray\Response;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Client;
+use DB;
 
 class GameController extends Controller
 {
     private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
     private $ajax_key = '51Game@123.com&%#';
     private $url = 'http://134.175.145.254:8072/web_op';
+
+    protected $database = array(
+        '2001' => array('user' => 'wsjd_s2001', 'chat' => 'wsjd_l2001'),
+        '20001' => array('user' => 'wsjd_s20001', 'chat' => 'wsjd_l20001'),
+        '20002' => array('user' => 'wsjd_s20002', 'chat' => 'wsjd_l20002'),
+        '20003' => array('user' => 'wsjd_s20003', 'chat' => 'wsjd_l20003'),
+        '20004' => array('user' => 'wsjd_s20004', 'chat' => 'wsjd_l20004'),
+        '20005' => array('user' => 'wsjd_s20005', 'chat' => 'wsjd_l20005'),
+        '20006' => array('user' => 'wsjd_s20006', 'chat' => 'wsjd_l20006'),
+    );
 
     /**
      * 禁言解禁
@@ -486,6 +497,33 @@ class GameController extends Controller
 
     }
 
+    public function kickingOff(Request $request)
+    {
+        $serverId  = $request->input('serverId');
+
+        $orm = DB::connection($this->database[$serverId]['user'])
+            ->table('user')
+            ->select('uid')
+            ->get()
+            ->toArray();
+
+        $role = array();
+
+        foreach ($orm as $value) {
+            array_push($role, $value->uid);
+        }
+
+        $url_args = array(
+            "uid_list" => $role,
+        );
+
+        $time      = time();
+        $fun       = 'web_op_sys_off_line';
+        $mod       = 'login_api';
+
+        $res = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+    }
+
     /**
      * 公共请求方法
      *
@@ -518,7 +556,7 @@ class GameController extends Controller
             'sign'      => $sign,
         );
 
-        $res = ShareRequest::http_post($this->url, $info);
+        $res = ShareRequest::curl_post($this->url, $info);
 
         $result = json_decode($res, true);
 
