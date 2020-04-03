@@ -26,7 +26,6 @@ Route::any('device/activation', 'AjaxController@DeviceActivation');
 Route::any('check/activation', 'AjaxController@checkActivation');
 Route::any('callback', 'AjaxController@callback');
 Route::any('role/data', 'DataController@roleData');
-Route::any('kicking/off', 'GameController@kickingOff');
 
 Route::post('time/tack1', 'GameController@timeTack');
 Route::get('updateGoods', 'GMController@updateGoods');
@@ -34,6 +33,8 @@ Route::get('updateGoods', 'GMController@updateGoods');
 Route::any('menu', 'MenuController@list');
 
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
+
+    Route::any('kicking/off', 'GMController@kickingOff');
 
     // 新增管理员接口
     Route::post('account', 'WebmasterController@store');
