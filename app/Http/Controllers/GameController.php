@@ -501,20 +501,8 @@ class GameController extends Controller
     {
         $serverId  = $request->input('serverId');
 
-        $orm = DB::connection($this->database[$serverId]['user'])
-            ->table('user')
-            ->select('uid')
-            ->get()
-            ->toArray();
-
-        $role = array();
-
-        foreach ($orm as $value) {
-            array_push($role, $value->uid);
-        }
-
         $url_args = array(
-            "uid_list" => $role,
+            "uid_list" => array(),
         );
 
         $time      = time();
@@ -522,6 +510,8 @@ class GameController extends Controller
         $mod       = 'login_api';
 
         $res = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+
+        return response(Response::Success($res));
     }
 
     /**
