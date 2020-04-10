@@ -29,7 +29,7 @@ Route::any('callback', 'AjaxController@callback');
 Route::any('role/data', 'DataController@roleData');
 
 Route::post('test/send/prop', 'GameController@sendProp');
-Route::post('test/send/solo/mail', 'GMController@sendSoloMail');
+Route::post('test/send/solo/mail', 'GameController@sendSoloMail');
 
 Route::post('time/tack1', 'GameController@timeTack');
 Route::get('updateGoods', 'GMController@updateGoods');

@@ -94,13 +94,13 @@ class GameController extends Controller
             "items"       => json_encode($item),
         );
 
-        $info = $externalService->parameter($sign_args, 'web_op_sys_mail', 'mail_api', time(), intval($server), $this->key);
+        $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($server), $this->key);
 
         $res = $externalService->post(env('SK_URL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
-            'server_id'  => $serverId,
+            'server_id'  => $server,
             'channel_id' => $channel,
             'account_id' => UID,
             'title'      => $title,
@@ -149,13 +149,13 @@ class GameController extends Controller
             "items"       => json_encode($item),
         );
 
-        $info = $externalService->parameter($sign_args, 'web_op_sys_mail', 'mail_api', time(), intval($serverId), $this->key);
+        $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($server), $this->key);
 
         $res = $externalService->post(env('SK_URL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
-            'server_id'  => $serverId,
+            'server_id'  => $server,
             'account_id' => UID,
             'title'      => $title,
             'content'    => $content,
