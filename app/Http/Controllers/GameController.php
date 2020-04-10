@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gmmail;
 use App\Service\APIHelperService;
 use App\Libray\ShareRequest;
 use App\Models\Announcement;
@@ -34,6 +35,143 @@ class GameController extends Controller
         '20005' => array('user' => 'wsjd_s20005', 'chat' => 'wsjd_l20005'),
         '20006' => array('user' => 'wsjd_s20006', 'chat' => 'wsjd_l20006'),
     );
+
+    public function sendMail(Request $request, ExternalService $externalService)
+    {
+        $server    = $request->input('server');
+        $title     = $request->input('title');
+        $role_list = $request->input('role', null);
+        $item_id   = $request->input('item_id');
+        $content   = $request->input('content');
+        $channel   = $request->input('channel', null);
+        $level     = $request->input('level', null);
+
+        $item = array();
+        if ($item_id) {
+            foreach ($item_id as $item_key => $item_value) {
+                $item_val = json_decode($item_value, true);
+                if (!empty($item_val)) {
+                    $item[$item_val['selectVal']] = intval($item_val['num']);
+                }
+            }
+        }
+
+        if (!empty($level[0]) && !empty($level[1])){
+            if ($level[0] == $level[1]){
+                $orm = DB::connection('wxfyl')
+                    ->table('user')
+                    ->where(['renown_lv' => $level[0]])
+                    ->select('uid', 'renown_lv')
+                    ->get();
+            }else{
+                $orm = DB::connection('wxfyl')
+                    ->table('user')
+                    ->whereBetween('renown_lv', [$level[0], $level[1]])
+                    ->select('uid', 'renown_lv')
+                    ->get();
+            }
+            $roleArray = array();
+            foreach ($orm as $orm_val){
+                array_push($roleArray, intval($orm_val->uid));
+            }
+        }else{
+            if (empty($role_list)) {
+                $role = array();
+            } else {
+                $role = explode("|", $role_list);
+            }
+
+            $roleArray = array();
+            foreach ($role as $role_val){
+                array_push($roleArray, intval($role_val));
+            }
+        }
+
+        $url_args = array(
+            "objects"     => $channel ? intval($channel) : $roleArray,
+            "title"       => strtolower($externalService->sinogram($title)),
+            "content"     => strtolower($externalService->sinogram($content)),
+            "items"       => json_encode($item),
+        );
+
+        $info = $externalService->parameter($sign_args, 'web_op_sys_mail', 'mail_api', time(), intval($server), $this->key);
+
+        $res = $externalService->post(env('SK_URL'), $info);
+
+        $result = Gmmail::create([
+            'role_list'  => $role_list,
+            'server_id'  => $serverId,
+            'channel_id' => $channel,
+            'account_id' => UID,
+            'title'      => $title,
+            'content'    => $content,
+            'attach_s'   => json_encode($item),
+        ]);
+
+        if ($res['res'] == "1") {
+            if ($result){
+                return response(Response::Success());
+            }
+            return response(Response::Error(trans('ResponseMsg.SPECIFIED_QUESTIONED_USER_NOT_EXIST'), 30001));
+
+        } else {
+            return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
+        }
+    }
+
+    public function sendSoloMail(Request $request, ExternalService $externalService)
+    {
+        $server    = $request->input('server');
+        $title     = $request->input('title');
+        $role_list = $request->input('role', null);
+        $item_id   = $request->input('item_id');
+        $content   = $request->input('content');
+
+        $item = array();
+        foreach ($item_id as $item_key => $item_value){
+            $item_val = json_decode($item_value, true);
+            if (!empty($item_val)){
+                $item[$item_val['selectVal']] = intval($item_val['num']);
+            }
+        }
+
+        $role = explode("|", $role_list);
+
+        $roleArray = array();
+        foreach ($role as $role_val){
+            array_push($roleArray, intval($role_val));
+        }
+
+        $url_args = array(
+            "objects"     => $roleArray,
+            "title"       => strtolower($externalService->sinogram($title)),
+            "content"     => strtolower($externalService->sinogram($content)),
+            "items"       => json_encode($item),
+        );
+
+        $info = $externalService->parameter($sign_args, 'web_op_sys_mail', 'mail_api', time(), intval($serverId), $this->key);
+
+        $res = $externalService->post(env('SK_URL'), $info);
+
+        $result = Gmmail::create([
+            'role_list'  => $role_list,
+            'server_id'  => $serverId,
+            'account_id' => UID,
+            'title'      => $title,
+            'content'    => $content,
+            'attach_s'   => json_encode($item),
+        ]);
+
+        if ($res['res'] == "1") {
+            if ($result){
+                return response(Response::Success());
+            }
+            return response(Response::Error(trans('ResponseMsg.SPECIFIED_QUESTIONED_USER_NOT_EXIST'), 30001));
+
+        } else {
+            return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
+        }
+    }
 
     /**
      * 禁言解禁
