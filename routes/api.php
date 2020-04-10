@@ -83,8 +83,8 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
     Route::any('carte/list', 'CarteController@carteList');
     Route::post('carte/add', 'CarteController@store');
 
-    Route::post('send/mail', 'GMController@sendMail');
-    Route::post('send/solo/mail', 'GMController@sendSoloMail');
+    Route::post('send/mail', 'GameController@sendMail');
+    Route::post('send/solo/mail', 'GameController@sendSoloMail');
     Route::any('send/mail/list', 'GMController@sendMailList');
 
     Route::post('roles/gift/store', 'GMController@newRolesGiftStore');
