@@ -505,6 +505,7 @@ class GameController extends Controller
     public function registerRoleMail(Request $request, NewRole $newRoleModel, ExternalService $externalService)
     {
         $rid  = $request->input('uid');
+        $sid  = $request->input('sid');
         $sign = $request->input('sign');
 
         if (!$rid || !$sid || !$sign){
@@ -526,7 +527,7 @@ class GameController extends Controller
                 "items"       => json_encode(json_decode($value['attach_s'], true)),
             );
 
-            $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($request->input('sid')), $this->key);
+            $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($sid), $this->key);
 
             $externalService->post(env('SK_URL'), $info);
         }
