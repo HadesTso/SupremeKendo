@@ -214,7 +214,7 @@ class GameController extends Controller
             'sign'      => $sign,
         );
 
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         $result = json_decode($res, true);
 
@@ -452,7 +452,7 @@ class GameController extends Controller
             'sign'      => $sign,
         );
 
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         $result = json_decode($res, true);
 
@@ -572,7 +572,7 @@ class GameController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
     }
 
     protected function send_post($url, $params) {
