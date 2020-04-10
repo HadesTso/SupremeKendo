@@ -1263,9 +1263,7 @@ class GMController extends Controller
 
     protected function addBan($ban)
     {
-        $result = Ban::create($ban);
-
-        return $result;
+        return Ban::create($ban);
     }
 
     protected function send_post($url, $params) {
@@ -1280,9 +1278,8 @@ class GMController extends Controller
             )
         );
         $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
 
-        return $result;
+        return file_get_contents($url, false, $context);
     }
 
 }
