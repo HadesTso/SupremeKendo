@@ -289,10 +289,12 @@ class GMController extends Controller
 
         $url_args = array(
             "objects"     => $roleInt,
-            "title"       => strtolower($title),
+            "title"       => strtolower($titles),
             "content"     => strtolower($contents),
             "items"       => json_encode($item),
         );
+
+        dump($item);
 
         $time = time();
         $sign_args = json_encode($url_args);
@@ -307,6 +309,8 @@ class GMController extends Controller
             'time'      => $time,
             'sign'      => $sign,
         );
+
+        dump($info);die;
 
         //发送内容
         $res = $this->send_post(env('SK_URL'), $info);

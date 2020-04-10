@@ -18,7 +18,8 @@ Route::any('addgoods', 'LoginController@update');
 
 Route::any('get/cast', 'AjaxController@getCast');
 Route::any('role/gift', 'AjaxController@giftUseCheck');
-Route::any('new/role', 'GameController@createRoleGift');
+// 创角色邮件
+Route::any('new/role', 'GameController@registerRoleMail');
 Route::any('white/ip/check', 'AjaxController@whiteIpCheck');
 Route::any('gift/info/excel', 'Upload\ExcelController@giftInfoExcel');
 Route::any('exclude/repeat', 'AjaxController@ExcludeRepeat');
@@ -28,6 +29,7 @@ Route::any('callback', 'AjaxController@callback');
 Route::any('role/data', 'DataController@roleData');
 
 Route::post('test/send/prop', 'GameController@sendProp');
+Route::post('test/send/solo/mail', 'GMController@sendSoloMail');
 
 Route::post('time/tack1', 'GameController@timeTack');
 Route::get('updateGoods', 'GMController@updateGoods');

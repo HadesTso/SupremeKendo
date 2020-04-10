@@ -156,12 +156,12 @@ class GameController extends Controller
     /**
      * 充值
      * @param Request $request
+     * @param ExternalService $externalService
      * @return ResponseFactory|\Illuminate\Http\Response
      */
-    public function recharge(Request $request)
+    public function recharge(Request $request, ExternalService $externalService)
     {
         $uid      = $request->input('uid');
-        $serverId = $request->input('server_id');
         $goods_id = $request->input('goods_id');
 
         $url_args = array(
@@ -169,13 +169,11 @@ class GameController extends Controller
             "goods_id" => $goods_id,
         );
 
-        $time      = time();
-        $fun       = 'web_op_sys_pay_rmb';
-        $mod       = 'pay_api';
+        $info = $externalService->parameter($url_args, 'web_op_sys_pay_rmb', 'pay_api', time(), $request->input('server_id'), $this->key);
 
-        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $result = $externalService->post(env('SK_URL'), $info);
 
-        if ($result['res'] == "1") {
+        if ($result['res'] == 1) {
             return response(Response::Success());
         } else {
             return response(Response::Error(trans('ResponseMsg.SYSTEM_INNER_ERROR'), 40001));
@@ -230,9 +228,10 @@ class GameController extends Controller
      * 关服
      * @param Request $request
      * @param Server $server
+     * @param ExternalService $externalService
      * @return ResponseFactory|\Illuminate\Http\Response
      */
-    public function closeSuit(Request $request, Server $server)
+    public function closeSuit(Request $request, Server $server, ExternalService $externalService)
     {
         $serverId = $request->input('id');
 
@@ -244,7 +243,9 @@ class GameController extends Controller
         $fun       = 'web_op_node';
         $mod       = 'global';
 
-        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $info = $externalService->parameter($url_args, $fun, $mod, $time, $serverId, $this->key);
+
+        $result = $externalService->post(env('SK_URL'), $info);
 
         if ($result['res'] == "1") {
             $server->where(['id' => $serverId])->update(['server_status' => 0, 'updated_at' => date('Y-m-d H:i:s', time())]);
@@ -498,81 +499,38 @@ class GameController extends Controller
      * 创角邮件接口
      * @param Request $request
      * @param NewRole $newRoleModel
-     * @return ResponseFactory|\Illuminate\Http\Response
+     * @param ExternalService $externalService
+     * @return void
      */
-    public function createRoleGift(Request $request, NewRole $newRoleModel)
+    public function registerRoleMail(Request $request, NewRole $newRoleModel, ExternalService $externalService)
     {
         $rid  = $request->input('uid');
-        $sid  = $request->input('sid');
         $sign = $request->input('sign');
 
-        /*if (!$rid || !$sid || !$sign){
+        if (!$rid || !$sid || !$sign){
             return response(Response::RequestError(137001));
         }
 
         if ($sign !== md5($rid.$sid.$this->ajax_key)){
             return response(Response::RequestError(137002));
-        }*/
+        }
 
         $newRole = $newRoleModel->where(['status' => 1])->get()->toArray();
 
-        $serverId = intval($sid);
-
         foreach ($newRole as $value) {
 
-            $res = $this->sendSoloMail($serverId, $value['title'], intval($rid), $value['attach_s'], $value['content']);
+            $url_args = array(
+                "objects"     => array(intval($rid)),
+                "title"       => strtolower($externalService->sinogram($value['title'])),
+                "content"     => strtolower($externalService->sinogram($value['content'])),
+                "items"       => json_encode(json_decode($value['attach_s'], true)),
+            );
 
+            $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($request->input('sid')), $this->key);
+
+            $externalService->post(env('SK_URL'), $info);
         }
 
-    }
-
-    private function sendSoloMail($server, $title, $role, $item, $content)
-    {
-        $serverId = intval($server);
-
-        $str_long_title = strlen($title);
-        $titles = '';
-        for ($i=0; $i < $str_long_title ; $i++) {
-            if(preg_match('/^[\x7f-\xff]+$/', $title[$i])){
-                $titles .= urlencode($title[$i]);
-            }else{
-                $titles .= $title[$i];
-            }
-        }
-
-        $str_long_content = strlen($content);
-        $contents = '';
-        for ($i=0; $i < $str_long_content ; $i++) {
-            if(preg_match('/^[\x7f-\xff]+$/', $content[$i])){
-                $contents .= urlencode($content[$i]);
-            }else{
-                $contents .= $content[$i];
-            }
-        }
-
-        $url_args = array(
-            "objects"     => array(intval($role)),
-            "title"       => strtolower($titles),
-            "content"     => strtolower($contents),
-            "items"       => json_encode($item),
-        );
-
-        $time = time();
-        $sign_args = json_encode($url_args);
-        $sign = md5("args={$sign_args}&fun=web_op_sys_mail&mod=mail_api&sid={$serverId}&time={$time}&key={$this->key}");
-
-        //组装内容
-        $info = array(
-            'args'      => $sign_args,
-            'fun'       => 'web_op_sys_mail',
-            'mod'       => 'mail_api',
-            'sid'       => $serverId,
-            'time'      => $time,
-            'sign'      => $sign,
-        );
-
-        //发送内容
-        $res = $this->send_post(env('SK_URL'), $info);
     }
 
     protected function send_post($url, $params) {
