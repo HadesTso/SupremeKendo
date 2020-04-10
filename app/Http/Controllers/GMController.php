@@ -49,7 +49,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         $res = json_decode($res, true);
 
@@ -92,7 +92,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
 
         if ($oper == 1) {
@@ -217,7 +217,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
@@ -309,7 +309,7 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         $result = Gmmail::create([
             'role_list'  => $role_list,
@@ -1256,16 +1256,14 @@ class GMController extends Controller
         );
 
         //发送内容
-        $res = $this->send_post(env('WXURL'), $info);
+        $res = $this->send_post(env('SK_URL'), $info);
 
         return $res;
     }
 
     protected function addBan($ban)
     {
-        $result = Ban::create($ban);
-
-        return $result;
+        return Ban::create($ban);
     }
 
     protected function send_post($url, $params) {
@@ -1280,9 +1278,8 @@ class GMController extends Controller
             )
         );
         $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
 
-        return $result;
+        return file_get_contents($url, false, $context);
     }
 
 }

@@ -14,7 +14,7 @@
 // 账号登录接口
 Route::any('login', 'LoginController@index');
 
-Route::any('addgoods', 'LoginController@addgoods');
+Route::any('addgoods', 'LoginController@update');
 
 Route::any('get/cast', 'AjaxController@getCast');
 Route::any('role/gift', 'AjaxController@giftUseCheck');
@@ -26,6 +26,8 @@ Route::any('device/activation', 'AjaxController@DeviceActivation');
 Route::any('check/activation', 'AjaxController@checkActivation');
 Route::any('callback', 'AjaxController@callback');
 Route::any('role/data', 'DataController@roleData');
+
+Route::post('test/send/prop', 'GameController@sendProp');
 
 Route::post('time/tack1', 'GameController@timeTack');
 Route::get('updateGoods', 'GMController@updateGoods');

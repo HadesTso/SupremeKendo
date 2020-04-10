@@ -13,12 +13,15 @@
         "barryvdh/laravel-ide-helper": "^2.6",
         "doctrine/dbal": " ~2.3",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "6.2",
+        "guzzlehttp/guzzle": "6.3.*",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "2.*",
         "predis/predis": "^1.1",
-        "rap2hpoutre/laravel-log-viewer": "^1.2"
+        "rap2hpoutre/laravel-log-viewer": "^1.2",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0",
+        "nesbot/carbon": "2.16.3 as 1.34.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -70,5 +73,11 @@
             "php artisan ide-helper:generate",
             "php artisan ide-helper:meta"
         ]
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
     }
 }
