@@ -24,37 +24,7 @@ class GMController extends Controller
 {
     private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
 
-    public function kickingOff(Request $request)
-    {
-        $server    = $request->input('serverId');
 
-        $serverId = intval($server);
-
-        $url_args = array(
-            "uid_list"     => "[]"
-        );
-
-        $time = time();
-        $sign_args = json_encode($url_args);
-        $sign = md5("args={$sign_args}&fun=web_op_sys_off_line&mod=login_api&sid={$serverId}&time={$time}&key={$this->key}");
-
-        //组装内容
-        $info = array(
-            'args'      => $sign_args,
-            'fun'       => 'web_op_sys_off_line',
-            'mod'       => 'login_api',
-            'sid'       => $serverId,
-            'time'      => $time,
-            'sign'      => $sign,
-        );
-
-        //发送内容
-        $res = $this->send_post(env('SK_URL'), $info);
-
-        $res = json_decode($res, true);
-
-        return response(Response::Success($res));
-    }
 
     public function banLogin(Request $request)
     {
