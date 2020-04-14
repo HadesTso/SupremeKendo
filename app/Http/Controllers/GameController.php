@@ -672,6 +672,27 @@ class GameController extends Controller
 
     }
 
+    /**
+     * 踢人下线
+     * @param Request $request
+     * @param ExternalService $externalService
+     * @return ResponseFactory|\Illuminate\Http\Response
+     */
+    public function kickingOff(Request $request, ExternalService $externalService)
+    {
+        $server    = $request->input('serverId');
+
+        $url_args = array(
+            "uid_list"     => "[]"
+        );
+
+        $info = $externalService->parameter($url_args, 'web_op_sys_off_line', 'login_api', time(), intval($server), $this->key);
+
+        $res = $externalService->post(env('SK_URL'), $info);
+
+        return response(Response::Success($res));
+    }
+
     protected function send_post($url, $params) {
 
         $post_data = http_build_query($params);

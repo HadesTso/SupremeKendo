@@ -38,7 +38,7 @@ Route::any('menu', 'MenuController@list');
 
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
 
-    Route::any('kicking/off', 'GMController@kickingOff');
+    Route::any('kicking/off', 'GameController@kickingOff');
 
     // 新增管理员接口
     Route::post('account', 'WebmasterController@store');
