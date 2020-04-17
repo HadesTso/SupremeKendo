@@ -24,6 +24,10 @@ class DataController extends Controller
         '20004' => array('user' => 'wsjd_s20004', 'chat' => 'wsjd_l20004'),
         '20005' => array('user' => 'wsjd_s20005', 'chat' => 'wsjd_l20005'),
         '20006' => array('user' => 'wsjd_s20006', 'chat' => 'wsjd_l20006'),
+        '20007' => array('user' => 'wsjd_s20007', 'chat' => 'wsjd_l20007'),
+        '20008' => array('user' => 'wsjd_s20008', 'chat' => 'wsjd_l20008'),
+        '20009' => array('user' => 'wsjd_s20009', 'chat' => 'wsjd_l20009'),
+        '20010' => array('user' => 'wsjd_s20010', 'chat' => 'wsjd_l20010'),
     );
 
     /*public function roleData(Request $request, Ban $ban)
