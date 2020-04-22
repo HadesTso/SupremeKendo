@@ -24,8 +24,6 @@ class GMController extends Controller
 {
     private $key = '##AP31SgWdfth46qc%Gs&zix@gtURREb';
 
-
-
     public function banLogin(Request $request)
     {
         $uid       = $request->input('role_id');
@@ -386,10 +384,7 @@ class GMController extends Controller
 
         $item = array();
         foreach ($box_item as $item_key => $item_value){
-            $item_val = json_decode($item_value, true);
-            if (!empty($item_val)){
-                $item[$item_val['selectVal']] = intval($item_val['num']);
-            }
+            $item[$item_value['selectVal']] = intval($item_value['num']);
         }
 
         $code_box->box_name      = $box_name;
