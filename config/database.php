@@ -145,6 +145,7 @@ return [
             'strict' => true,
             'engine' => null,
         ],
+
         'wsjd_s20003' => [
             'driver' => 'mysql',
             'host' => '134.175.89.20',
