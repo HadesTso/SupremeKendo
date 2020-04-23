@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class NewRole extends Model
 {
     protected $fillable = [
-        'title', 'content', 'attach_s', 'status', 'account_id'
+        'title', 'content', 'attach_s', 'status', 'account_id', 'channel'
     ];
 
     public function account()
