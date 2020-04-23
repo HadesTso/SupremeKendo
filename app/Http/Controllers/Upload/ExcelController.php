@@ -48,7 +48,7 @@ class ExcelController extends Controller
             });
         })->store('xls');
 
-        $url = env('APP_URL'). '/storage/exports/'.$filename. '.xls';
+        $url = env('APP_URL'). '/exports/'.$filename. '.xls';
 
         return response(Response::Success(array('url' => $url)));
 
