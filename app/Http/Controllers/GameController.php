@@ -646,7 +646,7 @@ class GameController extends Controller
         $sid  = $request->input('sid');
         $sign = $request->input('sign');
 
-        if (!$rid || !$sid || !$sign){
+        if (!$rid || !$sid || !$sign || !$cid){
             return response(Response::RequestError(137001));
         }
 
@@ -655,6 +655,39 @@ class GameController extends Controller
         }
 
         $newRole = $newRoleModel->where(['status' => 1])->get()->toArray();
+
+        foreach ($newRole as $value) {
+
+            $url_args = array(
+                "objects"     => array(intval($rid)),
+                "title"       => strtolower($externalService->sinogram($value['title'])),
+                "content"     => strtolower($externalService->sinogram($value['content'])),
+                "items"       => json_encode(json_decode($value['attach_s'], true)),
+            );
+
+            $info = $externalService->parameter($url_args, 'web_op_sys_mail', 'mail_api', time(), intval($sid), $this->key);
+
+            $externalService->post(env('SK_URL'), $info);
+        }
+
+    }
+
+    public function registerRoleMailTest(Request $request, NewRole $newRoleModel, ExternalService $externalService)
+    {
+        $rid  = $request->input('uid');
+        $cid  = $request->input('cid');
+        $sid  = $request->input('sid');
+        $sign = $request->input('sign');
+
+        if (!$rid || !$sid || !$sign || !$cid){
+            return response(Response::RequestError(137001));
+        }
+
+        if ($sign !== md5($rid.$sid.$cid.$this->ajax_key)){
+            return response(Response::RequestError(137002));
+        }
+
+        $newRole = $newRoleModel->where(['status' => 1, 'cid' => $cid])->get()->toArray();
 
         foreach ($newRole as $value) {
 

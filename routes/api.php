@@ -20,6 +20,7 @@ Route::any('get/cast', 'AjaxController@getCast');
 Route::any('role/gift', 'AjaxController@giftUseCheck');
 // 创角色邮件
 Route::any('new/role', 'GameController@registerRoleMail');
+Route::any('new/role/test', 'GameController@registerRoleMailTest');
 Route::any('white/ip/check', 'AjaxController@whiteIpCheck');
 Route::any('gift/info/excel', 'Upload\ExcelController@giftInfoExcel');
 Route::any('exclude/repeat', 'AjaxController@ExcludeRepeat');
