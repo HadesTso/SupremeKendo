@@ -643,6 +643,7 @@ class GameController extends Controller
     public function registerRoleMail(Request $request, NewRole $newRoleModel, ExternalService $externalService)
     {
         $rid  = $request->input('uid');
+        $cid  = $request->input('cid');
         $sid  = $request->input('sid');
         $sign = $request->input('sign');
 
@@ -650,11 +651,11 @@ class GameController extends Controller
             return response(Response::RequestError(137001));
         }
 
-        if ($sign !== md5($rid.$sid.$this->ajax_key)){
+        if ($sign !== md5($rid.$sid.$cid.$this->ajax_key)){
             return response(Response::RequestError(137002));
         }
 
-        $newRole = $newRoleModel->where(['status' => 1])->get()->toArray();
+        $newRole = $newRoleModel->where(['status' => 1])->whereRaw("FIND_IN_SET(?,channel)", $cid)->get()->toArray();
 
         foreach ($newRole as $value) {
 
