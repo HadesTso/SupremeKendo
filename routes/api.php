@@ -37,6 +37,8 @@ Route::get('updateGoods', 'GMController@updateGoods');
 
 Route::any('menu', 'MenuController@list');
 
+Route::post('roles/gift/store', 'GMController@newRolesGiftStore');
+
 Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
 
     Route::any('kicking/off', 'GameController@kickingOff');
@@ -88,7 +90,7 @@ Route::group(['middleware' => 'AuthToken', 'prefix' => 'auth'], function (){
     Route::post('send/solo/mail', 'GameController@sendSoloMail');
     Route::any('send/mail/list', 'GMController@sendMailList');
 
-    Route::post('roles/gift/store', 'GMController@newRolesGiftStore');
+
     Route::any('roles/gift/list', 'GMController@newRolesGiftList');
     Route::patch('roles/gift/{id}', 'GMController@newRolesGiftUpdate');
 

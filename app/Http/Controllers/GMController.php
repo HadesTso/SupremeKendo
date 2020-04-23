@@ -195,6 +195,12 @@ class GMController extends Controller
         $item_id = $request->input('item_id');
         $channel = $request->input('channel');
 
+        $channelArray = array();
+
+        foreach ($channel as $value) {
+            $channelArray[]['cid'] = $value;
+        }
+
         $item = array();
         foreach ($item_id as $item_key => $item_value){
             $item_val = json_decode($item_value, true);
@@ -209,7 +215,7 @@ class GMController extends Controller
             'content'    => $content,
             'status'     => 1,
             'attach_s'   => json_encode($item),
-            'channel'    => json_encode($channel)
+            'channel'    => json_encode($channelArray)
         ]);
 
         if ($result) {
