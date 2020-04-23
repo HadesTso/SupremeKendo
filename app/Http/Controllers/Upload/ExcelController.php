@@ -50,7 +50,7 @@ class ExcelController extends Controller
 
         $url = env('APP_URL'). '/store/exports/'.$filename. '.xls';
 
-        return response(Response::Success($url));
+        return response(Response::Success(array('url' => $url)));
 
     }
 }
