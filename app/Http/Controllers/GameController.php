@@ -687,7 +687,7 @@ class GameController extends Controller
             return response(Response::RequestError(137002));
         }
 
-        $newRole = $newRoleModel->where(['status' => 1])->whereIn()->get()->toArray();
+        $newRole = $newRoleModel->where(['status' => 1])->whereRaw("FIND_IN_SET(?,channel)", $cid)->get()->toArray();
 
         foreach ($newRole as $value) {
 
