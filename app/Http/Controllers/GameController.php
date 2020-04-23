@@ -687,7 +687,7 @@ class GameController extends Controller
             return response(Response::RequestError(137002));
         }
 
-        $newRole = $newRoleModel->where(['status' => 1, 'cid' => $cid])->get()->toArray();
+        $newRole = $newRoleModel->where(['status' => 1])->whereIn()->get()->toArray();
 
         foreach ($newRole as $value) {
 
