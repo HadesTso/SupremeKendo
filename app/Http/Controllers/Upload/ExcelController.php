@@ -40,11 +40,17 @@ class ExcelController extends Controller
             $cellData[] = array($value['code']);
         }
 
-        Excel::create('礼包码',function($excel) use ($cellData){
+        $filename = '礼包码' . time();
+
+        Excel::create($filename,function($excel) use ($cellData){
             $excel->sheet('gift', function($sheet) use ($cellData){
                 $sheet->rows($cellData);
             });
-        })->export('xls');
+        })->store('xls');
+
+        $url = env('APP_URL'). '/store/exports/'.$filename. '.xls';
+
+        return response(Response::Success($url));
 
     }
 }
