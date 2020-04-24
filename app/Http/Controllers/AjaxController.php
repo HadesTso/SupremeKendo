@@ -104,12 +104,6 @@ class AjaxController extends Controller
             }
         }
 
-        if ($res['codeBatch']['server_id'] != 0){
-            if ($sid != $res['codeBatch']['server_id']){
-                return response(Response::RequestError(137005));
-            }
-        }
-
         $role = $code_use->where(['role_id' => $rid, 'code_box_id' => $res->code_box_id])->first();
 
         if ($role){
@@ -117,7 +111,7 @@ class AjaxController extends Controller
         }
 
         if ($res->remain_count <= 0){
-            return response(Response::RequestError(137004));
+            return response(Response::RequestError(137005));
         }
 
         DB::beginTransaction();
