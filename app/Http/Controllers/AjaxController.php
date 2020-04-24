@@ -69,10 +69,10 @@ class AjaxController extends Controller
         $sign = $request->input('sign');
 
         $roleUseCode->rid = $rid;
-        $roleUseCode->code = $rid;
-        $roleUseCode->cid = $rid;
-        $roleUseCode->sid = $rid;
-        $roleUseCode->status = $rid;
+        $roleUseCode->code = $code;
+        $roleUseCode->cid = $cid;
+        $roleUseCode->sid = $sid;
+        $roleUseCode->status = 0;
         $roleUseCodeOrm = $roleUseCode->save();
 
         if (!$rid || !$code  || !$sid || !$sign){
