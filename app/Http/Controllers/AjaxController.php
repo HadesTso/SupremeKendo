@@ -8,6 +8,7 @@ use App\Models\Code;
 use App\Models\CodeUse;
 use App\Models\Content;
 use App\Models\Idfa;
+use App\Models\RoleUseCode;
 use App\Models\Server;
 use App\Models\WhiteIp;
 use Illuminate\Http\Request;
@@ -55,16 +56,24 @@ class AjaxController extends Controller
      * @param Request $request
      * @param CodeUse $code_use
      * @param Code $codeModel
+     * @param RoleUseCode $roleUseCode
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      */
-    public function giftUseCheck(Request $request, CodeUse $code_use, Code $codeModel)
+    public function giftUseCheck(Request $request, CodeUse $code_use, Code $codeModel, RoleUseCode $roleUseCode)
     {
         $rid  = $request->input('roleId');
         $code = $request->input('code');
         $cid  = $request->input('cid');
         $sid  = $request->input('serverId');
         $sign = $request->input('sign');
+
+        $roleUseCode->rid = $rid;
+        $roleUseCode->code = $rid;
+        $roleUseCode->cid = $rid;
+        $roleUseCode->sid = $rid;
+        $roleUseCode->status = $rid;
+        $roleUseCodeOrm = $roleUseCode->save();
 
         if (!$rid || !$code  || !$sid || !$sign){
             return response(Response::RequestError(137001));
