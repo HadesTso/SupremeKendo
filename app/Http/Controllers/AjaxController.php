@@ -22,6 +22,7 @@ class AjaxController extends Controller
      * 白名单验证
      * @param Request $request
      * @param WhiteIp $white_ip
+     * @param Server $server
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function whiteIpCheck(Request $request, WhiteIp $white_ip, Server $server)

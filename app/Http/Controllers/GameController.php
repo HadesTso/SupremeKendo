@@ -724,7 +724,9 @@ class GameController extends Controller
 
         $res = $externalService->post(env('SK_URL'), $info);
 
-        return response(Response::Success($res));
+        if ($res['res'] == "1") {
+            return response(Response::Success($res));
+        }
     }
 
     protected function send_post($url, $params) {
