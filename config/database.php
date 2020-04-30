@@ -239,7 +239,7 @@ return [
         ],
         'wsjd_s20010' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20010',
             'username' => 'root',
@@ -252,7 +252,7 @@ return [
         ],
         'wsjd_s20011' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20011',
             'username' => 'root',
@@ -265,7 +265,7 @@ return [
         ],
         'wsjd_s20012' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20012',
             'username' => 'root',
@@ -278,7 +278,7 @@ return [
         ],
         'wsjd_s20013' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20013',
             'username' => 'root',
@@ -291,7 +291,7 @@ return [
         ],
         'wsjd_s20014' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20014',
             'username' => 'root',
@@ -304,7 +304,7 @@ return [
         ],
         'wsjd_s20015' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20015',
             'username' => 'root',
@@ -317,7 +317,7 @@ return [
         ],
         'wsjd_s20016' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '106.52.16.91',
             'port' => '3306',
             'database' => 'wsjd_s20016',
             'username' => 'root',
@@ -330,7 +330,7 @@ return [
         ],
         'wsjd_s30000' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30000',
             'username' => 'root',
@@ -343,7 +343,7 @@ return [
         ],
         'wsjd_s30001' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30001',
             'username' => 'root',
@@ -356,7 +356,7 @@ return [
         ],
         'wsjd_s30002' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30002',
             'username' => 'root',
@@ -369,7 +369,7 @@ return [
         ],
         'wsjd_s30003' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30003',
             'username' => 'root',
@@ -382,7 +382,7 @@ return [
         ],
         'wsjd_s30004' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30004',
             'username' => 'root',
@@ -395,7 +395,7 @@ return [
         ],
         'wsjd_s30005' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30005',
             'username' => 'root',
@@ -408,7 +408,7 @@ return [
         ],
         'wsjd_s30006' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30006',
             'username' => 'root',
@@ -421,7 +421,7 @@ return [
         ],
         'wsjd_s30007' => [
             'driver' => 'mysql',
-            'host' => '134.175.89.20',
+            'host' => '182.254.178.180',
             'port' => '3306',
             'database' => 'wsjd_s30007',
             'username' => 'root',
