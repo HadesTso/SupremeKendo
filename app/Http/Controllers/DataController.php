@@ -29,6 +29,20 @@ class DataController extends Controller
         '20008' => array('user' => 'wsjd_s20008', 'chat' => 'wsjd_l20008'),
         '20009' => array('user' => 'wsjd_s20009', 'chat' => 'wsjd_l20009'),
         '20010' => array('user' => 'wsjd_s20010', 'chat' => 'wsjd_l20010'),
+        '20011' => array('user' => 'wsjd_s20011', 'chat' => 'wsjd_l20011'),
+        '20012' => array('user' => 'wsjd_s20012', 'chat' => 'wsjd_l20012'),
+        '20013' => array('user' => 'wsjd_s20013', 'chat' => 'wsjd_l20013'),
+        '20014' => array('user' => 'wsjd_s20014', 'chat' => 'wsjd_l20014'),
+        '20015' => array('user' => 'wsjd_s20015', 'chat' => 'wsjd_l20015'),
+        '20016' => array('user' => 'wsjd_s20016', 'chat' => 'wsjd_l20016'),
+        '30000' => array('user' => 'wsjd_s30000', 'chat' => 'wsjd_l30000'),
+        '30001' => array('user' => 'wsjd_s30001', 'chat' => 'wsjd_l30001'),
+        '30002' => array('user' => 'wsjd_s30002', 'chat' => 'wsjd_l30002'),
+        '30003' => array('user' => 'wsjd_s30003', 'chat' => 'wsjd_l30003'),
+        '30004' => array('user' => 'wsjd_s30004', 'chat' => 'wsjd_l30004'),
+        '30005' => array('user' => 'wsjd_s30005', 'chat' => 'wsjd_l30005'),
+        '30006' => array('user' => 'wsjd_s30006', 'chat' => 'wsjd_l30006'),
+        '30007' => array('user' => 'wsjd_s30007', 'chat' => 'wsjd_l30007'),
     );
 
     /*public function roleData(Request $request, Ban $ban)
