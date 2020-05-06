@@ -7,6 +7,7 @@ use App\Libray\Response;
 use App\Models\Account;
 use App\Models\Admin;
 use App\Models\Good;
+use App\Models\Manager;
 use App\Models\ManagerCarte;
 use App\Service\MenuService;
 use Illuminate\Http\Request;
@@ -15858,7 +15859,7 @@ class LoginController extends Controller
 
     }
 
-    public function index(Request $request, Account $account)
+    public function index(Request $request, Account $account, Manager $manager)
     {
         $username = $request->input('username', null);
         $password = $request->input('password', null);
@@ -15877,9 +15878,22 @@ class LoginController extends Controller
             return response(Response::Error(trans('ResponseMsg.USER_LOGIN_ERROR'), 20002));
         }
 
+        $menu = $manager->where(['id' => $user->manager_id])->first();
+
         $Token = $this->setLoginToken($user);
         $Token['game'] = $user->game;
         $Token['manager_id'] = $user->manager_id;
+        $Token['menu'] = json_decode($menu->menu, true);
+        $Token['name'] = $user->real_name;
+
+        $channel = array();
+        $tags = json_decode($user->channel, true);
+        if ($tags) {
+            foreach ($tags as $val) {
+                $channel[] = json_decode($val, true);
+            }
+        }
+        $Token['channel'] = $channel;
 
         return response(Response::Success($Token));
     }

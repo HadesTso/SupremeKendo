@@ -23,6 +23,7 @@ class WebmasterController extends Controller
         $account->manager_id   = empty($data['manager_id']) ? NULL : $data['manager_id'];
         $account->game         = empty($data['game']) ? json_encode(array()) : json_encode($data['game']);
         $account->status       = 1;
+        $account->channel      = json_encode($data['channel']);
         $account->ip           = $request->getClientIp();
 
         $result = $account->save();
@@ -57,6 +58,7 @@ class WebmasterController extends Controller
 
         $orm->real_name  = $real_name;
         $orm->manager_id = $manager_id;
+        $orm->channel = json_encode($channel);
         $result = $orm->save();
 
         if (!$result){
@@ -94,6 +96,17 @@ class WebmasterController extends Controller
             $orm->where(['manager_id' => $manager_id]);
         }
         $list = $orm->paginate(10);
+
+        foreach ($list as $value) {
+            $channel = array();
+            $tags = json_decode($value['channel'], true);
+            if ($tags) {
+                foreach ($tags as $val) {
+                    $channel[] = json_decode($val, true);
+                }
+            }
+            $value['channel'] = $channel;
+        }
 
         return response(Response::Success($list));
     }
