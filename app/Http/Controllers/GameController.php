@@ -222,9 +222,10 @@ class GameController extends Controller
      * 封停ip
      * @param Request $request
      * @param IpOperation $ip_operation
+     * @param ExternalService $externalService
      * @return ResponseFactory|\Illuminate\Http\Response
      */
-    public function closureIp(Request $request, IpOperation $ip_operation)
+    public function closureIp(Request $request, IpOperation $ip_operation, ExternalService $externalService)
     {
         $ip       = $request->input('ip');
         $times    = $request->input('times');
@@ -240,7 +241,9 @@ class GameController extends Controller
         $fun       = 'web_op_sys_ip_suspend';
         $mod       = 'login_api';
 
-        $result = $this->requestModule($url_args, $fun, $mod, $time, $serverId, $this->key);
+        $info = $externalService->parameter($url_args, $fun, $mod, $time, $serverId, $this->key);
+
+        $result = $externalService->post(env('SK_URL'), $info);
 
         if ($result['res'] == "1") {
             $ip_operation->ip         = $ip;
