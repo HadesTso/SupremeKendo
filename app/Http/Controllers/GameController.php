@@ -595,7 +595,7 @@ class GameController extends Controller
         );
         (new Logger('local'))
             ->pushHandler(new RotatingFileHandler(storage_path('logs/api.log')))
-            ->info('send', ['请求数据' => json_encode($info), '发送时间' => date('Y-m-d H:i:s', $work_time)]);
+            ->info('send', ['请求数据' => json_encode($info), '发送时间' => date('Y-m-d H:i:s', $work_time), '手机时间格式' => $activity_at]);
 
         $res = $this->send_post(env('SK_URL'), $info);
 
