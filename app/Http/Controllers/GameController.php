@@ -16,9 +16,9 @@ use App\Service\ExternalService;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use App\Libray\Response;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Client;
 use DB;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
 
 class GameController extends Controller
 {
@@ -593,6 +593,9 @@ class GameController extends Controller
             'time'      => $time,
             'sign'      => $sign,
         );
+        (new Logger('local'))
+            ->pushHandler(new RotatingFileHandler(storage_path('logs/api.log')))
+            ->info('send', ['请求数据' => json_encode($info), '发送时间' => date('Y-m-d H:i:s', $work_time)]);
 
         $res = $this->send_post(env('SK_URL'), $info);
 
