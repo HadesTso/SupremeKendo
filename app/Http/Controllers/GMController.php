@@ -136,7 +136,7 @@ class GMController extends Controller
                 if ($value['role_list']) {
                     $role = explode("|", $value['role_list']);
                     $role_name = '';
-                    foreach ($role as $k => $v) {
+                    /*foreach ($role as $k => $v) {
                         $roleName = DB::connection('wsjd_s2001')
                             ->table('user')
                             ->where(['uid' => $v])
@@ -146,7 +146,7 @@ class GMController extends Controller
                         if ($roleName) {
                             $role_name .= $roleName->uname . '、';
                         }
-                    }
+                    }*/
                     $value['role_name'] = substr($role_name, 0, strrpos($role_name, "、"));
                 } else {
                     $value['role_name'] = '全区服';
